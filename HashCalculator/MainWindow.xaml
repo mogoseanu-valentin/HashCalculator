@@ -5,339 +5,476 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HashCalculator"
         mc:Ignorable="d"
-        Title="Hash Calculator" Height="800" Width="600"
-        WindowStartupLocation="CenterScreen">
-    
+        Title="Hash Calculator"
+        Height="800"
+        Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed">
+
     <Grid Background="#ccdfff">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0"
-                    Margin="10,0">
-            <TextBlock Text="Hash Calculator" 
-                       FontSize="32"
-                       HorizontalAlignment="Center"
-                       Margin="0,50"
-                       FontFamily="Verdana"
-                       FontWeight="ExtraBlack"
-                       Foreground="#003a99"/>
-            
-            <TextBlock Text="Choose the hash function" 
-                       FontWeight="DemiBold"
-                       FontSize="14"
-                       Margin="0,5"
-                       Foreground="#003a99"/>
-            
-            <UniformGrid Rows="1"
-                         Columns="2"
-                         Margin="0,5">
-                <RadioButton Content="SHA 256" 
-                             GroupName="sha"
-                             IsChecked="True"
-                             FontSize="16"
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0"
+                        Margin="10,0">
+                <TextBlock Text="Hash Calculator"
+                           FontSize="32"
+                           HorizontalAlignment="Center"
+                           Margin="0,50"
+                           FontFamily="Verdana"
+                           FontWeight="ExtraBlack"
+                           Foreground="#003a99" />
+
+                <TextBlock Text="Choose the hash function"
+                           FontWeight="DemiBold"
+                           FontSize="14"
+                           Margin="0,5"
+                           Foreground="#003a99" />
+
+                <UniformGrid Rows="1"
+                             Columns="2"
+                             Margin="0,5">
+                    <RadioButton Content="SHA 256"
+                                 GroupName="sha"
+                                 IsChecked="True"
+                                 FontSize="16"
+                                 Foreground="#003a99"
+                                 Checked="SHA256_Checked" />
+                    <RadioButton Content="SHA 512"
+                                 GroupName="sha"
+                                 FontSize="16"
+                                 Foreground="#003a99"
+                                 Checked="SHA512_Checked" />
+                </UniformGrid>
+
+                <TextBlock Text="Choose a file:"
+                           FontSize="14"
+                           FontWeight="DemiBold"
+                           Margin="0,5,0,0"
+                           Foreground="#003a99" />
+
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Style="{DynamicResource TextBoxStyle}"
+                             Grid.Column="0"
+                             Margin="0,0,5,0"
+                             FontSize="14"
+                             IsReadOnly="True"
+                             Background="#e6efff"
+                             BorderThickness="1"
                              Foreground="#003a99"
-                             Checked="SHA256_Checked" />
-                <RadioButton Content="SHA 512"
-                             GroupName="sha"
-                             FontSize="16"
-                             Foreground="#003a99"
-                             Checked="SHA512_Checked" />
-            </UniformGrid>
-            
-            <TextBlock Text="Choose a file:" 
-                       FontSize="14"
-                       FontWeight="DemiBold"
-                       Margin="0,5,0,0"
-                       Foreground="#003a99"/>
-            
-            <Grid Margin="0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                
-                <TextBox Style="{DynamicResource TextBoxStyle}"
-                         Grid.Column="0"
-                         Margin="0,0,5,0"
-                         FontSize="14"
-                         IsReadOnly="True"
-                         Background="#e6efff"
-                         BorderThickness="1"
-                         Foreground="#003a99"
-                         Padding="2.5"
-                         x:Name="FilePathTbx"/>
-                
-                <Button Content="Browse" 
-                        Grid.Column="1"
-                        Margin="5,0,0,0"
-                        Padding="10,5"
-                        FontSize="14"
+                             Padding="2.5"
+                             x:Name="FilePathTbx" />
+
+                    <Button Content="Browse"
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            Padding="10,5"
+                            FontSize="14"
+                            Style="{StaticResource ButtonStyle}"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Background="#0061ff"
+                            Foreground="#60efff"
+                            BorderThickness="0"
+                            Click="BrowseButton_Click" />
+                </Grid>
+
+                <TextBlock Text="*The file must be at least 5MB in size!"
+                           Margin="0,0,0,5"
+                           FontSize="12"
+                           FontStyle="Italic"
+                           Foreground="#003a99" />
+
+                <Button Content="Calculate"
+                        Margin="0,10"
+                        Padding="0,5"
+                        FontSize="16"
                         Style="{StaticResource ButtonStyle}"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
+                        BorderThickness="0"
+                        BorderBrush="White"
                         Background="#0061ff"
                         Foreground="#60efff"
+                        Click="CalculateButton_Click" />
+            </StackPanel>
+
+            <Border Grid.Row="1"
+                    CornerRadius="8"
+                    BorderThickness="1"
+                    Margin="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                            Background="#0061ff"
+                            CornerRadius="10,10,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="0.375*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Hash value"
+                                       FontSize="18"
+                                       Foreground="#60efff"
+                                       FontWeight="DemiBold"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Margin="10"
+                                       Grid.Column="0" />
+
+                            <TextBlock Text="File path"
+                                       FontSize="18"
+                                       Foreground="#60efff"
+                                       FontWeight="DemiBold"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Margin="10"
+                                       Grid.Column="1" />
+
+                            <TextBlock Text="Hash"
+                                       FontSize="18"
+                                       Foreground="#60efff"
+                                       FontWeight="DemiBold"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Margin="10"
+                                       Grid.Column="2" />
+
+                            <TextBlock Text="Action"
+                                       FontSize="18"
+                                       Foreground="#60efff"
+                                       FontWeight="DemiBold"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Margin="10"
+                                       Grid.Column="3" />
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            Background="#e6efff"
+                            CornerRadius="0,0,10,10">
+
+                        <ListView BorderThickness="0"
+                                  Background="Transparent"
+                                  HorizontalContentAlignment="Stretch"
+                                  Foreground="#003a99"
+                                  ItemsSource="{Binding Source={x:Static local:App.Data}, Path=HashResults, Mode=TwoWay}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                  AlternationCount="2"
+                                  Padding="0"
+                                  x:Name="HashResultsListView"
+                                  SelectionChanged="HashResultsListView_SelectionChanged"
+                                  SelectedIndex="0">
+
+                            <ListView.Resources>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        x:Name="border">
+                                                    <ContentPresenter />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                                        <Setter Property="Background"
+                                                                Value="#0057e6" />
+                                                        <Setter Property="Foreground"
+                                                                Value="#e6efff" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected"
+                                                             Value="True">
+                                                        <Setter Property="Background"
+                                                                Value="#003a99" />
+                                                        <Setter Property="Foreground"
+                                                                Value="#e6efff" />
+                                                    </Trigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
+                                                                       Value="0" />
+                                                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                                       Value="False" />
+                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                                       Value="False" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background"
+                                                                Value="#ccdfff" />
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
+                                                                       Value="1" />
+                                                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                                       Value="False" />
+                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                                       Value="False" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background"
+                                                                Value="#80b0ff" />
+                                                    </MultiDataTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.Resources>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="0.5*" />
+                                            <ColumnDefinition Width="0.375*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding HashValue}"
+                                                   Grid.Column="0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Margin="5,10"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center" />
+
+                                        <TextBlock Text="{Binding FilePath}"
+                                                   Grid.Column="1"
+                                                   Margin="10"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" />
+
+                                        <TextBlock Text="{Binding HashFunction}"
+                                                   Grid.Column="2"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+
+                                        <UniformGrid Grid.Column="3"
+                                                     Rows="1"
+                                                     Columns="2">
+
+                                            <Button Style="{StaticResource ButtonStyle}"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Background="#3381ff"
+                                                    BorderThickness="0"
+                                                    Padding="2.5"
+                                                    ToolTip="Copy hash value"
+                                                    x:Name="CopyButton"
+                                                    Click="CopyButton_Click">
+                                                <Image Source="Resources/copy.png"
+                                                       Stretch="UniformToFill"
+                                                       SnapsToDevicePixels="True"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
+                                            </Button>
+
+                                            <Button Style="{StaticResource ButtonStyle}"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Background="#3381ff"
+                                                    BorderThickness="0"
+                                                    Padding="2.5"
+                                                    ToolTip="Delete the row"
+                                                    x:Name="DeleteButton"
+                                                    Click="DeleteButton_Click">
+                                                <Image Source="Resources/delete.png"
+                                                       Stretch="UniformToFill"
+                                                       SnapsToDevicePixels="True"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
+                                            </Button>
+
+                                        </UniformGrid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <UniformGrid Columns="2"
+                         Rows="1"
+                         Grid.Row="2">
+
+                <Button Content="Erase data"
+                        FontSize="16"
+                        Padding="0,7.5"
+                        Margin="5"
+                        Style="{StaticResource ButtonStyle}"
                         BorderThickness="0"
-                        Click="BrowseButton_Click" />
-            </Grid>
-            
-            <TextBlock Text="*The file must be at least 5MB in size!"
-                       Margin="0,0,0,5"
-                       FontSize="12"
-                       FontStyle="Italic"
-                       Foreground="#003a99"/>
-            
-            <Button Content="Calculate" 
-                    Margin="0,10"
-                    Padding="0,5"
-                    FontSize="16"
-                    Style="{StaticResource ButtonStyle}"
-                    VerticalContentAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    BorderThickness="0"
-                    BorderBrush="White"
-                    Background="#0061ff"
-                    Foreground="#60efff"
-                    Click="CalculateButton_Click" />
-        </StackPanel>
-
-        <Border Grid.Row="1"
-                CornerRadius="8"
-                BorderThickness="1"
-                Margin="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Border Grid.Row="0"
                         Background="#0061ff"
-                        CornerRadius="10,10,0,0">
+                        Foreground="White"
+                        x:Name="EraseButton"
+                        Click="EraseButton_Click" />
+
+                <Button Content="Backup data"
+                        FontSize="16"
+                        Padding="0,7.55"
+                        Margin="5,5,10,5"
+                        Style="{StaticResource ButtonStyle}"
+                        BorderThickness="0"
+                        Background="#0061ff"
+                        Foreground="White"
+                        x:Name="BackUpButtton"
+                        Click="BackUpButtton_Click" />
+
+            </UniformGrid>
+        </Grid>
+
+        <Grid Grid.Column="1"
+              Background="#b3d0ff">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <Image Source="Resources/pdf.png"
+                       Margin="25"
+                       HorizontalAlignment="Center"
+                       SnapsToDevicePixels="True"
+                       RenderOptions.BitmapScalingMode="HighQuality"
+                       MaxWidth="200"
+                       MaxHeight="200" />
+
+                <TextBlock HorizontalAlignment="Center"
+                           FontSize="16"
+                           Margin="5"
+                           x:Name="FileNameLbl"
+                           Foreground="#003a99"
+                           FontWeight="DemiBold"
+                           TextTrimming="CharacterEllipsis"
+                           Text="No file selected!" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="5"
+                               Foreground="#003a99"
+                               FontWeight="Bold"
+                               TextTrimming="CharacterEllipsis"
+                               Text="File path:"
+                               Grid.Column="0" />
+
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               x:Name="FilePathLbl"
+                               Foreground="#003a99"
+                               TextTrimming="CharacterEllipsis"
+                               Grid.Column="1" />
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="5"
+                               Foreground="#003a99"
+                               FontWeight="Bold"
+                               TextTrimming="CharacterEllipsis"
+                               Text="File size (KB):"
+                               Grid.Column="0" />
+
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               x:Name="FileSizeLbl"
+                               Foreground="#003a99"
+                               TextTrimming="CharacterEllipsis"
+                               Grid.Column="1" />
+                </Grid>
+            </StackPanel>
+
+            <Grid Grid.Row="1"
+                  Margin="5">
+
+                <Border Background="#e6efff"
+                        CornerRadius="10">
+
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="0.5*" />
-                            <ColumnDefinition Width="0.375*" />
+                            <ColumnDefinition Width="27*" />
+                            <ColumnDefinition Width="296*" />
                         </Grid.ColumnDefinitions>
+                        <Button Style="{StaticResource ButtonStyle}"
+                                Width="25"
+                                Height="25"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                Margin="0,5,5,0"
+                                Background="#3381ff"
+                                BorderThickness="0"
+                                Padding="2.5"
+                                ToolTip="Copy hash value"
+                                x:Name="CoppyHashValue"
+                                Click="CoppyHashValue_Click"
+                                Panel.ZIndex="1"
+                                Grid.Column="1">
+                            <Image Source="Resources/copy.png"
+                                   Stretch="UniformToFill"
+                                   SnapsToDevicePixels="True"
+                                   RenderOptions.BitmapScalingMode="HighQuality" />
+                        </Button>
 
-                        <TextBlock Text="Hash value" 
-                                   FontSize="18"
-                                   Foreground="#60efff"
-                                   FontWeight="DemiBold"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"
-                                   Grid.Column="0"/>
-                        
-                        <TextBlock Text="File path"
-                                   FontSize="18"
-                                   Foreground="#60efff"
-                                   FontWeight="DemiBold"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"
-                                   Grid.Column="1" />
-
-                        <TextBlock Text="Hash"
-                                   FontSize="18"
-                                   Foreground="#60efff"
-                                   FontWeight="DemiBold"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Margin="10"
-                                   Grid.Column="2" />
-
-                        <TextBlock Text="Action"
-                                   FontSize="18"
-                                   Foreground="#60efff"
-                                   FontWeight="DemiBold"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Margin="10"
-                                   Grid.Column="3" />
+                        <TextBox Style="{DynamicResource TextBoxStyle}"
+                                 TextWrapping="Wrap"
+                                 FontSize="14"
+                                 IsReadOnly="True"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="#003a99"
+                                 AcceptsReturn="True"
+                                 Padding="2.5"
+                                 x:Name="HashValueLbl"
+                                 Grid.ColumnSpan="2" />
                     </Grid>
                 </Border>
-
-                <Border Grid.Row="1"
-                        Background="#e6efff"
-                        CornerRadius="0,0,10,10">
-
-                    <ListView BorderThickness="0"
-                              Background="Transparent"
-                              HorizontalContentAlignment="Stretch"
-                              Foreground="#003a99"
-                              ItemsSource="{Binding Source={x:Static local:App.Data}, Path=HashResults, Mode=TwoWay}"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                              AlternationCount="2"
-                              Padding="0">
-
-                        <ListView.Resources>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ListViewItem">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    x:Name="border">
-                                                <ContentPresenter />
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver"
-                                                         Value="True">
-                                                    <Setter Property="Background"
-                                                            Value="#0057e6" />
-                                                    <Setter Property="Foreground"
-                                                            Value="#e6efff" />
-                                                </Trigger>
-                                                <Trigger Property="IsSelected"
-                                                         Value="True">
-                                                    <Setter Property="Background"
-                                                            Value="#003a99" />
-                                                    <Setter Property="Foreground"
-                                                            Value="#e6efff" />
-                                                </Trigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
-                                                                   Value="0" />
-                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
-                                                                   Value="False" />
-                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
-                                                                   Value="False" />
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="Background"
-                                                            Value="#ccdfff" />
-                                                </MultiDataTrigger>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
-                                                                   Value="1" />
-                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
-                                                                   Value="False" />
-                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
-                                                                   Value="False" />
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="Background"
-                                                            Value="#80b0ff" />
-                                                </MultiDataTrigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListView.Resources>
-
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="0.5*" />
-                                        <ColumnDefinition Width="0.375*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Text="{Binding HashValue}"
-                                               Grid.Column="0"
-                                               TextTrimming="CharacterEllipsis"
-                                               Margin="5,10"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center" />
-
-                                    <TextBlock Text="{Binding FilePath}"
-                                               Grid.Column="1"
-                                               Margin="10"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               TextTrimming="CharacterEllipsis" />
-
-                                    <TextBlock Text="{Binding HashFunction}"
-                                               Grid.Column="2"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-
-                                    <UniformGrid Grid.Column="3"
-                                                 Rows="1"
-                                                 Columns="2">
-
-                                        <Button Style="{StaticResource ButtonStyle}"
-                                                Width="25"
-                                                Height="25"
-                                                Background="#3381ff"
-                                                BorderThickness="0"
-                                                Padding="2.5"
-                                                ToolTip="Copy hash value">
-                                            <Image Source="Resources/copy.png"
-                                                   Stretch="UniformToFill"
-                                                   SnapsToDevicePixels="True"
-                                                   RenderOptions.BitmapScalingMode="HighQuality" />
-                                        </Button>
-
-                                        <Button Style="{StaticResource ButtonStyle}"
-                                                Width="25"
-                                                Height="25"
-                                                Background="#3381ff"
-                                                BorderThickness="0"
-                                                Padding="2.5"
-                                                ToolTip="Delete the row">
-                                            <Image Source="Resources/delete.png"
-                                                   Stretch="UniformToFill"
-                                                   SnapsToDevicePixels="True"
-                                                   RenderOptions.BitmapScalingMode="HighQuality" />
-                                        </Button>
-
-                                    </UniformGrid>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Border>
             </Grid>
-        </Border>
 
-        
+        </Grid>
 
-        
 
-        <UniformGrid Columns="3"
-                     Rows="1"
-                     Grid.Row="2">
-            
-            <Button Content="View details" 
-                    FontSize="16"
-                    Padding="0,7.5"
-                    Margin="10,5,5,5"
-                    Style="{StaticResource ButtonStyle}"
-                    BorderThickness="0"
-                    Background="#0061ff"
-                    Foreground="White"/>
-            
-            <Button Content="Erase data" 
-                    FontSize="16"
-                    Padding="0,7.5"
-                    Margin="5"
-                    Style="{StaticResource ButtonStyle}"
-                    BorderThickness="0"
-                    Background="#0061ff"
-                    Foreground="White" />
-            
-            <Button Content="Backup data" 
-                    FontSize="16"
-                    Padding="0,7.55"
-                    Margin="5,5,10,5"
-                    Style="{StaticResource ButtonStyle}"
-                    BorderThickness="0"
-                    Background="#0061ff"
-                    Foreground="White" />
-            
-        </UniformGrid>
-        
+
     </Grid>
 </Window>

@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.IO;
 
 namespace HashCalculator
 {
@@ -27,14 +29,18 @@ namespace HashCalculator
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void LoadData()
+        public void Load()
         {
-            
+            string jsonFile = "hashResults.json";
+            string json = File.ReadAllText(jsonFile);
+            HashResults = JsonSerializer.Deserialize<ObservableCollection<HashResult>>(json);
         }
 
-        public void SaveData()
+        public void Save()
         {
-
+            string jsonFile = "hashResults.json";
+            string json = JsonSerializer.Serialize(HashResults);
+            File.WriteAllText(jsonFile, json);
         }
     }
 }

@@ -9,17 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="hashResults.json" />
     <None Remove="Resources\copy.png" />
     <None Remove="Resources\delete.png" />
+    <None Remove="Resources\pdf.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="hashResults.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\copy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\delete.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\pdf.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0-preview.5.24306.5" />
   </ItemGroup>
 
   <ItemGroup>
